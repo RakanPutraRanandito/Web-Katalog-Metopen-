@@ -1,11 +1,19 @@
-<?php require 'config.php';
+<?php
+require 'config.php';
+error_reporting(E_ALL); // aktifkan error reporting
+
+$q = trim($_GET['q'] ?? ''); // supaya $q tidak undefined
+
 // aktifkan error reporting dulu
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 
 $s=db()->prepare('SELECT * FROM tanaman WHERE nama LIKE ? OR nama_latin LIKE ? ORDER BY id DESC');
 $s->execute(["%$q%","%$q%"]);$rows=$s->fetchAll();
 head('Kebun Hijau - Koleksi Tanaman'); ?>
-<header class="top"><a class="logo" href="index.php">🌿 Kebun Hijau</a><a href="admin/login.php">Admin</a></header>
-<section class="hero"><h1>Kenali &amp; rawat tanamanmu</h1><p>Koleksi tanaman lengkap dengan panduan perawatan.</p>
+<header class="top"><a class="logo" href="index.php"> KEBUN HIJAU RPTRA PERMAI</a><a href="admin/login.php">Admin</a></header>
+<section class="hero"><h1>Kenali Jenis &amp; Manfaat tanaman</h1><p>Koleksi tanaman di kebun RPTRA PERMAI.</p>
 <form><input name="q" value="<?=e($q)?>" placeholder="Cari tanaman..."><button>Cari</button></form></section>
 <main class="grid">
 <?php foreach($rows as $r): ?>
