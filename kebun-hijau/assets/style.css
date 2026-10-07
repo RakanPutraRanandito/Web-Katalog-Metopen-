@@ -4,9 +4,10 @@
 a{color:var(--g);text-decoration:none}.top{display:flex;justify-content:space-between;align-items:center;padding:14px 5vw;background:var(--card);border-bottom:1px solid var(--bd);position:sticky;top:0;z-index:5}
 .logo{font-weight:700;font-size:1.2rem}.hero{text-align:center;padding:60px 5vw;background:linear-gradient(135deg,var(--g2),var(--bg))}
 .hero h1{font-size:clamp(1.8rem,5vw,3rem);margin:0 0 8px}.hero form{display:flex;gap:8px;justify-content:center;margin-top:20px}
-input,textarea,button{font:inherit;padding:10px 12px;border:1px solid var(--bd);border-radius:10px;background:var(--card);color:var(--fg);width:100%}
+input,textarea,button,select{font:inherit;padding:10px 12px;border:1px solid var(--bd);border-radius:10px;background:var(--card);color:var(--fg);width:100%}
 .hero input{max-width:340px}button,.btn{background:var(--g);color:#fff;border:0;cursor:pointer;width:auto;display:inline-block;padding:10px 18px;border-radius:10px;font-weight:600}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:20px;padding:30px 5vw}.grid.mini{padding:10px 0}
+.plant-group h2{margin:30px 5vw 0;color:var(--g)}.plant-group .grid{padding-top:14px}.category{display:inline-block;background:var(--g2);color:var(--g);padding:4px 10px;border-radius:20px;font-weight:600}
 .card{background:var(--card);border:1px solid var(--bd);border-radius:16px;overflow:hidden;color:inherit;transition:.2s}.card:hover{transform:translateY(-4px);box-shadow:0 10px 24px #0002}
 .card img,.ph{width:100%;height:190px;object-fit:cover;display:block}.ph{display:grid;place-items:center;font-size:4rem;background:var(--g2)}
 .cb{padding:14px}.cb h3{margin:0}.cb p{margin:6px 0;font-size:.92rem}.cb span{color:var(--g);font-weight:600;font-size:.9rem}

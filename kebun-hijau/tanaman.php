@@ -5,9 +5,11 @@ $o=db()->prepare('SELECT id,nama,foto FROM tanaman WHERE id<>? ORDER BY RAND() L
 head($t['nama'].' - Kebun Hijau'); $y=yt($t['video_url']); ?>
 <header class="top"><a class="logo" href="index.php">🌿 Kebun Hijau</a><a href="index.php">← Semua tanaman</a></header>
 <main class="wrap">
+<p class="category"><?=e($t['kategori'])?></p>
 <h1><?=e($t['nama'])?></h1><em><?=e($t['nama_latin'])?></em>
 <?php if($t['foto']): ?><img class="big" src="uploads/<?=e($t['foto'])?>" alt="<?=e($t['nama'])?>"><?php endif ?>
 <h2>Tentang</h2><p><?=nl2br(e($t['deskripsi']))?></p>
+<?php if($t['manfaat']): ?><h2>Manfaat</h2><p><?=nl2br(e($t['manfaat']))?></p><?php endif ?>
 <h2>Cara Perawatan</h2><p><?=nl2br(e($t['perawatan']))?></p>
 <?php if($t['video']||$y): ?><h2>Video</h2>
 <?php if($t['video']): ?><video class="big" controls src="uploads/<?=e($t['video'])?>"></video><?php endif ?>
