@@ -12,7 +12,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){check();
   else db()->prepare('INSERT INTO tanaman(nama,nama_latin,kategori,ringkasan,deskripsi,manfaat,perawatan,foto,video,video_url) VALUES(?,?,?,?,?,?,?,?,?,?)')->execute($d);
   header('Location: index.php?ok=1');exit;}
 head(($id?'Edit':'Tambah').' Tanaman','../'); ?>
-<header class="top"><a class="logo" href="index.php">⚙️ Dashboard Admin</a><a href="index.php">← Kembali</a></header>
+<header class="top"><a class="logo" href="index.php"> Dashboard Admin</a><a href="index.php">← Kembali</a></header>
 <main class="wrap"><h2><?=$id?'Edit':'Tambah'?> Tanaman</h2>
 <form method="post" enctype="multipart/form-data" class="box"><input type="hidden" name="t" value="<?=csrf()?>">
 <label>Nama<input name="nama" required value="<?=e($t['nama'])?>"></label>
@@ -20,12 +20,15 @@ head(($id?'Edit':'Tambah').' Tanaman','../'); ?>
 <label>Kelompok<select name="kategori" required><?php foreach(['Tanaman Obat','Tanaman Hias','Tanaman Pangan / Sayuran / Buah','Lainnya'] as $kategori): ?><option value="<?=e($kategori)?>" <?=$t['kategori']===$kategori?'selected':''?>><?=e($kategori)?></option><?php endforeach ?></select></label>
 <label>Ringkasan (tampil di kartu)<input name="ringkasan" maxlength="255" value="<?=e($t['ringkasan'])?>"></label>
 <label>Deskripsi<textarea name="deskripsi" rows="6"><?=e($t['deskripsi'])?></textarea></label>
+
+<label>karakteristik dan Asal-Usul<textarea name="karakteristik" rows="6"><?=e($t['karakteristik'])?></textarea></label>
+<label>Jenis-Jenis Populer<textarea name="jenis" rows="6"><?=e($t['jenis'])?></textarea></label>
+
 <label>Manfaat<textarea name="manfaat" rows="6"><?=e($t['manfaat'])?></textarea></label>
 <label>Cara Perawatan<textarea name="perawatan" rows="6"><?=e($t['perawatan'])?></textarea></label>
 <label>Foto (jpg/png/webp, maks 5MB)<input type="file" name="foto" accept="image/*"></label>
 <?php if($t['foto']): ?><img class="th" src="../uploads/<?=e($t['foto'])?>"> <label class="ck"><input type="checkbox" name="hapus_foto"> Hapus foto</label><?php endif ?>
 <label>Video upload (mp4/webm, maks 100MB*)<input type="file" name="video" accept="video/mp4,video/webm"></label>
 <?php if($t['video']): ?><label class="ck"><input type="checkbox" name="hapus_video"> Hapus video (<?=e($t['video'])?>)</label><?php endif ?>
-<label>Atau link YouTube<input name="video_url" placeholder="https://www.youtube.com/watch?v=..." value="<?=e($t['video_url'])?>"></label>
 <small>*Batas upload juga dipengaruhi <code>upload_max_filesize</code> di hosting. Video besar lebih aman pakai link YouTube.</small>
 <button class="btn">Simpan</button></form></main></body></html>
