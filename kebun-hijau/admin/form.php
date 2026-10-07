@@ -1,5 +1,5 @@
 <?php require '../config.php';need_admin();
-$id=(int)($_GET['id']??0);$t=['nama'=>'','nama_latin'=>'','ringkasan'=>'','deskripsi'=>'','perawatan'=>'','foto'=>'','video'=>'','video_url'=>''];
+$id=(int)($_GET['id']??0);$t=['nama'=>'','nama_latin'=>'','kategori'=>'Tanaman Hias','ringkasan'=>'','deskripsi'=>'','manfaat'=>'','perawatan'=>'','foto'=>'','video'=>'','video_url'=>''];
 if($id){$s=db()->prepare('SELECT * FROM tanaman WHERE id=?');$s->execute([$id]);$t=$s->fetch()?:die('Tidak ada');}
 if($_SERVER['REQUEST_METHOD']==='POST'){check();
   $f=$t['foto'];$v=$t['video'];
@@ -7,9 +7,9 @@ if($_SERVER['REQUEST_METHOD']==='POST'){check();
   if(!empty($_POST['hapus_video'])){rm($v);$v=null;}
   if($n=upload($_FILES['foto']??null,['jpg','jpeg','png','webp','gif'],5*1024*1024)){rm($f);$f=$n;}
   if($n=upload($_FILES['video']??null,['mp4','webm'],100*1024*1024)){rm($v);$v=$n;}
-  $d=[trim($_POST['nama']),trim($_POST['nama_latin']),trim($_POST['ringkasan']),$_POST['deskripsi'],$_POST['perawatan'],$f,$v,trim($_POST['video_url'])];
-  if($id){$d[]=$id;db()->prepare('UPDATE tanaman SET nama=?,nama_latin=?,ringkasan=?,deskripsi=?,perawatan=?,foto=?,video=?,video_url=? WHERE id=?')->execute($d);}
-  else db()->prepare('INSERT INTO tanaman(nama,nama_latin,ringkasan,deskripsi,perawatan,foto,video,video_url) VALUES(?,?,?,?,?,?,?,?)')->execute($d);
+  $d=[trim($_POST['nama']),trim($_POST['nama_latin']),$_POST['kategori'],trim($_POST['ringkasan']),$_POST['deskripsi'],$_POST['manfaat']??'',$_POST['perawatan'],$f,$v,trim($_POST['video_url'])];
+  if($id){$d[]=$id;db()->prepare('UPDATE tanaman SET nama=?,nama_latin=?,kategori=?,ringkasan=?,deskripsi=?,manfaat=?,perawatan=?,foto=?,video=?,video_url=? WHERE id=?')->execute($d);}
+  else db()->prepare('INSERT INTO tanaman(nama,nama_latin,kategori,ringkasan,deskripsi,manfaat,perawatan,foto,video,video_url) VALUES(?,?,?,?,?,?,?,?,?,?)')->execute($d);
   header('Location: index.php?ok=1');exit;}
 head(($id?'Edit':'Tambah').' Tanaman','../'); ?>
 <header class="top"><a class="logo" href="index.php"> Dashboard Admin</a><a href="index.php">← Kembali</a></header>
@@ -17,10 +17,13 @@ head(($id?'Edit':'Tambah').' Tanaman','../'); ?>
 <form method="post" enctype="multipart/form-data" class="box"><input type="hidden" name="t" value="<?=csrf()?>">
 <label>Nama<input name="nama" required value="<?=e($t['nama'])?>"></label>
 <label>Nama Latin<input name="nama_latin" value="<?=e($t['nama_latin'])?>"></label>
+<label>Kelompok<select name="kategori" required><?php foreach(['Tanaman Obat','Tanaman Hias','Tanaman Pangan / Sayuran / Buah','Lainnya'] as $kategori): ?><option value="<?=e($kategori)?>" <?=$t['kategori']===$kategori?'selected':''?>><?=e($kategori)?></option><?php endforeach ?></select></label>
 <label>Ringkasan (tampil di kartu)<input name="ringkasan" maxlength="255" value="<?=e($t['ringkasan'])?>"></label>
 <label>Deskripsi<textarea name="deskripsi" rows="6"><?=e($t['deskripsi'])?></textarea></label>
+
 <label>karakteristik dan Asal-Usul<textarea name="karakteristik" rows="6"><?=e($t['karakteristik'])?></textarea></label>
 <label>Jenis-Jenis Populer<textarea name="jenis" rows="6"><?=e($t['jenis'])?></textarea></label>
+
 <label>Manfaat<textarea name="manfaat" rows="6"><?=e($t['manfaat'])?></textarea></label>
 <label>Cara Perawatan<textarea name="perawatan" rows="6"><?=e($t['perawatan'])?></textarea></label>
 <label>Foto (jpg/png/webp, maks 5MB)<input type="file" name="foto" accept="image/*"></label>

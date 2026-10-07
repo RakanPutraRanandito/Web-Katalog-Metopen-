@@ -9,10 +9,11 @@ head('Dashboard Admin','../'); ?>
 <main class="wrap wide">
 <div class="bar"><h2>Daftar Tanaman (<?=count($rows)?>)</h2><a class="btn" href="form.php">+ Tambah Tanaman</a></div>
 <?php if(isset($_GET['ok'])) echo '<p class="ok">Berhasil disimpan.</p>' ?>
-<div class="scroll"><table><tr><th>Foto</th><th>Nama</th><th>Media</th><th>Aksi</th></tr>
+<div class="scroll"><table><tr><th>Foto</th><th>Nama</th><th>Kelompok</th><th>Media</th><th>Aksi</th></tr>
 <?php foreach($rows as $r): ?><tr>
 <td><?php if($r['foto']) echo '<img class="th" src="../uploads/'.e($r['foto']).'">'; else echo '🪴' ?></td>
 <td><b><?=e($r['nama'])?></b><br><small><?=e($r['nama_latin'])?></small></td>
+<td><?=e($r['kategori'])?></td>
 <td><?=$r['foto']?'📷 ':''?><?=($r['video']||$r['video_url'])?'🎬':''?></td>
 <td class="act"><a class="btn s" href="../tanaman.php?id=<?=$r['id']?>" target="_blank">Lihat</a> <a class="btn s" href="form.php?id=<?=$r['id']?>">Edit</a>
 <form method="post" onsubmit="return confirm('Hapus tanaman ini?')"><input type="hidden" name="t" value="<?=csrf()?>"><input type="hidden" name="id" value="<?=$r['id']?>"><button class="btn s red">Hapus</button></form></td></tr>
