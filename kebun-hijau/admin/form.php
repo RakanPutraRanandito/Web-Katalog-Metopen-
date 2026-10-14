@@ -25,7 +25,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){check();
     $d=array_values($isi);array_push($d,$f?:null,$v?:null);
     if($id){$d[]=$id;db()->prepare('UPDATE tanaman SET nama=?,nama_latin=?,kategori=?,ringkasan=?,deskripsi=?,karakteristik=?,jenis=?,manfaat=?,perawatan=?,video_url=?,foto=?,video=? WHERE id=?')->execute($d);}
     else db()->prepare('INSERT INTO tanaman(nama,nama_latin,kategori,ringkasan,deskripsi,karakteristik,jenis,manfaat,perawatan,video_url,foto,video) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)')->execute($d);
-    header('Location: index.php?ok=1');exit;}
+    header('Location: index.php?ok=1'.($id?'#tanaman-'.$id:''));exit;}
 }
 head(($id?'Edit':'Tambah').' Tanaman','../'); ?>
 <header class="top"><a class="logo" href="index.php">Dashboard Admin</a><a class="navlink" href="index.php">← Kembali</a></header>

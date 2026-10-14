@@ -12,7 +12,7 @@ $kelompok=array_filter($kelompok,fn($v,$n)=>isset(KATEGORI[$n])||$v,ARRAY_FILTER
 head('Dashboard Admin','../'); ?>
 <header class="top"><a class="logo" href="index.php">Dashboard Admin</a><span class="navlink"><a href="../index.php" target="_blank">Lihat website</a> · <a href="logout.php">Keluar (<?=e($_SESSION['admin'])?>)</a></span></header>
 <main class="wrap wide">
-<div class="bar"><h2>Daftar Tanaman <span class="count"><?=count($rows)?></span></h2><a class="btn" href="form.php">+ Tambah Tanaman</a></div>
+<div class="bar"><h2>Daftar Tanaman <span class="count"><?=count($rows)?></span></h2></div>
 <?php if(isset($_GET['ok'])) echo '<p class="ok">✅ Berhasil disimpan.</p>' ?>
 
 <nav class="chips admin-chips" aria-label="Loncat ke kelompok">
@@ -25,7 +25,7 @@ head('Dashboard Admin','../'); ?>
   <?php if(isset(KATEGORI[$n])): ?><a class="btn s" href="form.php?k=<?=$i['slug']?>">+ Tambah di sini</a><?php endif ?></div>
   <?php if(!$list): ?><p class="empty-mini">Belum ada tanaman di kelompok ini 🌱</p><?php else: ?>
   <div class="scroll"><table><tr><th>Foto</th><th>Nama</th><th>Media</th><th>Aksi</th></tr>
-  <?php foreach($list as $r): ?><tr>
+  <?php foreach($list as $r): ?><tr id="tanaman-<?=$r['id']?>">
     <td><?php if($r['foto']) echo '<img class="th" src="../uploads/'.e($r['foto']).'" alt="">'; else echo '<span class="th-ph">'.$i['emoji'].'</span>' ?></td>
     <td><b><?=e($r['nama'])?></b><br><small><?=e($r['nama_latin'])?></small></td>
     <td><?=$r['foto']?'📷 ':''?><?=($r['video']||$r['video_url'])?'🎬':''?></td>
@@ -35,4 +35,6 @@ head('Dashboard Admin','../'); ?>
   <?php endif ?>
 </section>
 <?php endforeach ?>
-</main></body></html>
+</main>
+<script src="../assets/scroll.js"></script>
+</body></html>
