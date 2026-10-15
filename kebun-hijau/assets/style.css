@@ -70,8 +70,6 @@ h1,h2,h3{font-family:var(--font-h);font-weight:600;line-height:1.25}
   text-shadow: 0 2px 6px rgba(0,0,0,0.5); /* biar teks tetap kebaca */
 }
 
-}
-
 .deco{position:absolute;font-size:2.2rem;opacity:.85;animation:float 5s ease-in-out infinite;user-select:none}
 .d1{left:7%;top:22%}.d2{right:8%;top:16%;animation-delay:-1.5s;font-size:2.6rem}.d3{right:20%;bottom:10%;animation-delay:-3s}
 @keyframes float{0%,100%{transform:translateY(0) rotate(-6deg)}50%{transform:translateY(-12px) rotate(8deg)}}
