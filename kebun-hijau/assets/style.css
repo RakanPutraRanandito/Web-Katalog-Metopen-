@@ -128,7 +128,7 @@ button:active,.btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--lea
 .cb{padding:12px 16px 16px;display:flex;flex-direction:column;flex:1}
 .cb h3{margin:0;color:var(--dark);font-size:1.15rem}
 .cb em{font-size:.86rem;color:var(--link);opacity:.9}
-.cb p{margin:6px 0 10px;font-size:.93rem;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.cb p{margin:6px 0 10px;font-size:.93rem;display:-webkit-box;line-clamp:3;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
 .more{margin-top:auto;align-self:flex-start;background:var(--tone);border:2px solid var(--edge);color:var(--dark);font-weight:800;font-size:.84rem;border-radius:999px;padding:2px 12px;transition:background-color .2s}
 .card:hover .more{background:var(--edge)}
 
@@ -205,7 +205,7 @@ footer{text-align:center;padding:30px 5vw 34px;color:var(--link);font-weight:700
   .grid{grid-template-columns:repeat(2,1fr);gap:14px}
   .grid.mini{grid-template-columns:repeat(2,1fr)}
   .card{border-radius:22px}.card img,.ph{height:120px;width:calc(100% - 14px);margin:7px 7px 0;border-radius:15px}
-  .cb{padding:9px 11px 13px}.cb h3{font-size:1rem}.cb p{font-size:.86rem;-webkit-line-clamp:2}
+  .cb{padding:9px 11px 13px}.cb h3{font-size:1rem}.cb p{font-size:.86rem;line-clamp:2;-webkit-line-clamp:2}
   .bubble{padding:16px 18px 18px;border-radius:24px}
   .big{border-radius:24px}.ph-big{height:170px}
 }

@@ -1,6 +1,9 @@
 <?php
 require 'config.php';
 
+// ---> TARUH DI SINI <--- Ambil daftar nama tanaman unik untuk datalist
+$list_tanaman = db()->query("SELECT DISTINCT nama FROM tanaman ORDER BY nama ASC")->fetchAll(PDO::FETCH_COLUMN);
+
 $q = trim($_GET['q'] ?? '');
 $slug = $_GET['k'] ?? '';
 $aktif = kat_dari_slug($slug);            // nama kelompok yang dipilih (null = semua)
@@ -44,10 +47,23 @@ head('Kebun Hijau - Koleksi Tanaman'); ?>
   <div class="hero-text">
     <h1>Kenali Jenis &amp; Manfaat tanaman</h1>
     <p>Koleksi tanaman di kebun RPTRA PERMAI.</p>
-    <form class="search">
-      <input name="q" value="<?= e($q) ?>" placeholder="Cari tanaman...">
+    <form class="search" action="index.php" method="GET">
+      <input 
+        name="q" 
+        value="<?= e($q) ?>" 
+        placeholder="Cari tanaman..." 
+        list="rekomendasi-tanaman" 
+        autocomplete="off"
+      >
+      
+      <datalist id="rekomendasi-tanaman">
+        <?php foreach ($list_tanaman as $nama): ?>
+          <option value="<?= e($nama) ?>"></option>
+        <?php endforeach; ?>
+      </datalist>
+
       <button>Cari</button>
-    </form>
+    </form>  
   </div>
 </section>
 
