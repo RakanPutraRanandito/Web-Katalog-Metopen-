@@ -59,7 +59,7 @@ head($t['nama'] . ' - Kebun Hijau'); ?>
             <?php endforeach ?>
         </div><?php endif ?>
 </main>
-<footer>© <?= date('Y') ?> Kebun Hijau RPTRA Permai · Bina Sarana Informatika </footer>
+<footer>© <?= date('Y') ?> Kebun Hijau RPTRA Permai · Bina Sarana Informatika Design By Ketan</footer>
 <script src="assets/scroll.js"></script>
 </body>
 

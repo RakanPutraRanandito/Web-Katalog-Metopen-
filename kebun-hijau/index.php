@@ -112,7 +112,7 @@ head('Kebun Hijau - Koleksi Tanaman'); ?>
       </section>
     <?php endforeach; endif ?>
 </main>
-<footer>© <?= date('Y') ?> RPTRA Permai · Bina Sarana Informatika Kelompok 3</footer>
+<footer>© <?= date('Y') ?> RPTRA Permai · Bina Sarana Informatika Design By Ketan</footer>
 <script src="assets/scroll.js"></script>
 </body>
 
