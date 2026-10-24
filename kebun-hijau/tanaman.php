@@ -16,13 +16,11 @@ $lain = $o->fetchAll();
 $i = kat($t['kategori']);
 $y = yt($t['video_url'] ?? '');
 // bagian-bagian yang tampil: kolom => [emoji, judul]; yang kosong otomatis disembunyikan
-$bagian = ['deskripsi' => ['🌱', 'Tentang'], 'karakteristik' => ['🔎', 'Karakteristik dan Asal-Usul'], 'manfaat' => ['💚', 'Manfaat'], 'perawatan' => ['💧', 'Cara Perawatan']];
+$bagian = ['deskripsi' => ['🌱', 'Ciri - ciri'], 'karakteristik' => ['🔎', 'Karakteristik dan Asal-Usul'], 'manfaat' => ['💚', 'Manfaat'], 'perawatan' => ['💧', 'Cara Perawatan']];
 
 head($t['nama'] . ' - Kebun Hijau'); ?>
-<header class="top"><a class="logo" href="index.php">Kebun Hijau RPTRA Permai</a><a class="navlink" href="index.php">←
-        Semua tanaman</a></header>
-<main class="wrap detail g-<?= $i['slug'] ?>">
-    <a class="badge" href="index.php?k=<?= $i['slug'] ?>"><?= $i['emoji'] ?> <?= e($t['kategori']) ?></a>
+<?php $kembali = ($_GET['from'] ?? '') === 'admin' ? 'admin/index.php#tanaman-' . $t['id'] : 'index.php?k=' . $i['slug']; ?>
+<header class="top"><a class="logo" href="index.php">Kebun Hijau RPTRA Permai</a><a class="navlink" href="<?= $kembali ?>">← Kembali </a></header><main class="wrap detail g-<?= $i['slug'] ?>">    <a class="badge" href="index.php?k=<?= $i['slug'] ?>"><?= $i['emoji'] ?> <?= e($t['kategori']) ?></a>
     <h1><?= e($t['nama']) ?></h1><?php if ($t['nama_latin']): ?><em
             class="latin"><?= e($t['nama_latin']) ?></em><?php endif ?>
     <?php if ($t['foto']): ?><img class="big" src="uploads/<?= e($t['foto']) ?>" alt="<?= e($t['nama']) ?>"><?php else: ?>
@@ -49,8 +47,7 @@ head($t['nama'] . ' - Kebun Hijau'); ?>
     <?php if ($lain): ?>
         <h2 class="lain-title">Tanaman lain di kelompok ini <?= $i['emoji'] ?></h2>
         <div class="grid mini"><?php foreach ($lain as $r): ?>
-                <a class="card" data-scroll-top href="tanaman.php?id=<?= $r['id'] ?>"><?php if ($r['foto']): ?><img
-                            src="uploads/<?= e($r['foto']) ?>" alt="<?= e($r['nama']) ?>" loading="lazy"><?php else: ?>
+                <a class="card" data-scroll-top href="tanaman.php?id=<?= $r['id'] ?><?= ($_GET['from'] ?? '') === 'admin' ? '&from=admin' : '' ?>"><?php if ($r['foto']): ?><img                            src="uploads/<?= e($r['foto']) ?>" alt="<?= e($r['nama']) ?>" loading="lazy"><?php else: ?>
                         <div class="ph"><?= $i['emoji'] ?></div><?php endif ?>
                     <div class="cb">
                         <h3><?= e($r['nama']) ?></h3>
