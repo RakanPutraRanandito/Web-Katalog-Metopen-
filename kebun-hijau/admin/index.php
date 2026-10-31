@@ -14,6 +14,9 @@ head('Dashboard Admin','../'); ?>
 <main class="wrap wide">
 <div class="bar"><h2>Daftar Tanaman <span class="count"><?=count($rows)?></span></h2></div>
 <?php if(isset($_GET['ok'])) echo '<p class="ok">✅ Berhasil disimpan.</p>' ?>
+<div class="search-admin">
+    <input type="text" id="searchTanaman" placeholder="🔍 Cari tanaman...">
+</div>
 
 <nav class="chips admin-chips" aria-label="Loncat ke kelompok">
 <?php foreach($kelompok as $n=>$list): $i=kat($n); ?><a class="chip c-<?=$i['slug']?>" href="#<?=$i['slug']?>"><?=$i['emoji']?> <?=e(str_replace('Tanaman ','',$n))?> <b><?=count($list)?></b></a><?php endforeach ?>
@@ -36,4 +39,31 @@ head('Dashboard Admin','../'); ?>
 <?php endforeach ?>
 </main>
 <script src="../assets/scroll.js"></script>
-</body></html>
+<script>
+document.getElementById('searchTanaman').addEventListener('keyup', function() {
+
+    let keyword = this.value.toLowerCase();
+
+    document.querySelectorAll('section.group').forEach(function(section){
+
+        let visible = 0;
+
+        section.querySelectorAll('tr[id^="tanaman-"]').forEach(function(row){
+
+            let text = row.innerText.toLowerCase();
+
+            if(text.includes(keyword)){
+                row.style.display = '';
+                visible++;
+            }else{
+                row.style.display = 'none';
+            }
+
+        });
+
+        section.style.display = visible > 0 ? '' : 'none';
+
+    });
+
+});
+</script></body></html>

@@ -20,8 +20,7 @@ label{display:flex;flex-direction:column;gap:5px;font-weight:600;font-size:.92re
 table{width:100%;border-collapse:collapse;background:var(--card);border-radius:12px;overflow:hidden}th,td{padding:10px 12px;border-bottom:1px solid var(--bd);text-align:left}
 th{background:var(--g2)}
 .th{width:64px;height:64px;object-fit:cover;border-radius:10px}.act{white-space:nowrap}.act form{display:inline}.btn.s{padding:6px 12px;font-size:.85rem}.red{background:#c0392b}
-=======
-/* ===== Kebun Hijau — tema hijau pastel gemes ===== */
+/* Kebun Hijau — tema hijau pastel gemes */
 :root{
   --bg:#f1fbee;--paper:#fbfff8;--white:#ffffff;
   --ink:#355b48;--dark:#27644a;--link:#2a7a52;
@@ -53,9 +52,9 @@ h1,h2,h3{font-family:var(--font-h);font-weight:600;line-height:1.25}
   border-bottom:3px dashed var(--line);position:sticky;top:0;z-index:5}
 .logo{font-family:var(--font-h);font-weight:600;font-size:1.15rem;color:var(--dark);letter-spacing:.2px}
 .logo:hover{text-decoration:none}
-.logo:before{content:"";display:inline-block;width:14px;height:20px;margin-right:9px;background:var(--leaf);
-  border-radius:100% 0 100% 0;transform:rotate(-35deg);vertical-align:-3px;transition:transform .3s}
-.logo:hover:before{transform:rotate(10deg) scale(1.15)}
+.logo:before{
+    display:none;
+}
 .navlink{font-weight:700;background:var(--mint);padding:6px 14px;border-radius:999px;border:2px solid var(--line);white-space:nowrap;font-size:.92rem}
 .navlink:hover{background:var(--leaf);text-decoration:none}
 
@@ -212,6 +211,18 @@ tr:hover td{background:#fbfffa}
 .red:hover{background:#ffd0dc;box-shadow:0 5px 0 #f2a2b7}
 
 footer{text-align:center;padding:30px 5vw 34px;color:var(--link);font-weight:700}
+.search-admin{
+    margin:15px 0;
+}
+
+.search-admin input{
+    width:100%;
+    max-width:400px;
+    padding:12px 16px;
+    border-radius:999px;
+    border:3px solid var(--edge);
+    background:#fff;
+}
 
 /* ---------- mobile ---------- */
 @media(max-width:620px){
@@ -233,4 +244,25 @@ footer{text-align:center;padding:30px 5vw 34px;color:var(--link);font-weight:700
   .big{border-radius:24px}.ph-big{height:170px}
 }
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;scroll-behavior:auto!important;transition:none!important}}
->>>>>>> 891fffe135f9470644aa43235ee9eee9007c23f8
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.brand img{
+    width:50px;
+    height:50px;
+    object-fit:contain;
+}
+
+table tr,
+table td{
+    background: #ffffff !important;
+    color: #355b48 !important;
+}
+
+table tr:hover td{
+    background: #f5fff5 !important;
+}
