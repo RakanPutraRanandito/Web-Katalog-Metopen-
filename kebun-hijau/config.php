@@ -32,11 +32,25 @@ function rm($n){if($n&&is_file(__DIR__.'/uploads/'.$n))unlink(__DIR__.'/uploads/
 // info (slug, emoji, sub) untuk sebuah kelompok; kelompok tak dikenal jatuh ke "Lainnya"
 function kat($nama){return KATEGORI[$nama]??KATEGORI_LAIN;}
 function kat_dari_slug($slug){foreach(KATEGORI as $n=>$i)if($i['slug']===$slug)return $n;return null;}
-
 function head($t,$b='',$cls=''){
-  $fav='data:image/svg+xml,'.rawurlencode('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🌱</text></svg>');
-  echo '<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#bfe8c8"><title>'.e($t).'</title>'
-   .'<link rel="icon" href="'.e($fav).'">'
-   .'<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
-   .'<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">'
-   .'<link rel="stylesheet" href="'.$b.'assets/style.css"></head><body class="'.e($cls).'">';}
+  echo '<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#bfe8c8">
+
+<title>'.e($t).'</title>
+
+<link rel="icon" type="image/png" href="'.$b.'uploads/logo.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="'.$b.'assets/style.css">
+
+</head>
+<body class="'.e($cls).'">';
+}

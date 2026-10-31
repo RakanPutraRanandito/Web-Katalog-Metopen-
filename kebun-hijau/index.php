@@ -36,8 +36,21 @@ function link_filter($slug, $q)
 }
 
 head('Kebun Hijau - Koleksi Tanaman'); ?>
-<header class="top"><a class="logo" href="index.php">KEBUN HIJAU RPTRA PERMAI</a><a class="navlink"
-    href="admin/login.php">Admin</a></header>
+<header class="top">
+
+    <div class="brand">
+        <img src="uploads/logo.png" alt="Logo">
+
+        <a class="logo" href="index.php">
+            KEBUN HIJAU RPTRA PERMAI
+        </a>
+    </div>
+
+    <a class="navlink" href="admin/login.php">
+        Login Admin
+    </a>
+
+</header>
 
 <section class="hero">
   <video autoplay muted loop class="hero-video">

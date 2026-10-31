@@ -1,4 +1,4 @@
-<?php require '../config.php';
+echo<?php require '../config.php';
 $err='';
 if($_SERVER['REQUEST_METHOD']==='POST'){check();
   $s=db()->prepare('SELECT * FROM admins WHERE username=?');$s->execute([$_POST['u']??'']);$a=$s->fetch();
