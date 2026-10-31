@@ -1,45 +1,46 @@
-<?php require 'config.php';
-$d=db();
-$d->exec("CREATE TABLE IF NOT EXISTS admins(id INT AUTO_INCREMENT PRIMARY KEY,username VARCHAR(50) UNIQUE NOT NULL,password VARCHAR(255) NOT NULL)");
-$d->exec("CREATE TABLE IF NOT EXISTS tanaman(id INT AUTO_INCREMENT PRIMARY KEY,nama VARCHAR(120) NOT NULL,nama_latin VARCHAR(160),kategori VARCHAR(80) NOT NULL DEFAULT 'Lainnya',ringkasan VARCHAR(255),deskripsi TEXT,manfaat TEXT,perawatan TEXT,foto VARCHAR(100),video VARCHAR(100),video_url VARCHAR(255),created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)");
-if(!$d->query("SHOW COLUMNS FROM tanaman LIKE 'kategori'")->fetch())
-  $d->exec("ALTER TABLE tanaman ADD kategori VARCHAR(80) NOT NULL DEFAULT 'Lainnya' AFTER nama_latin");
-if(!$d->query("SHOW COLUMNS FROM tanaman LIKE 'manfaat'")->fetch())
-  $d->exec("ALTER TABLE tanaman ADD manfaat TEXT AFTER deskripsi");
-if(!$d->query("SELECT 1 FROM admins WHERE username='admin'")->fetch())
-  $d->prepare("INSERT INTO admins(username,password) VALUES('admin',?)")->execute([password_hash('admin123',PASSWORD_DEFAULT)]);
-if(!$d->query("SELECT 1 FROM tanaman LIMIT 1")->fetch()){
-  $s=$d->prepare("INSERT INTO tanaman(nama,nama_latin,kategori,ringkasan,deskripsi,perawatan) VALUES(?,?,?,?,?,?)");
-  $s->execute(['Monstera','Monstera deliciosa','Tanaman Hias','Tanaman hias daun berlubang yang populer.',"Monstera berasal dari hutan tropis Amerika Tengah. Daunnya besar, mengkilap, dan berlubang khas.",'Cahaya terang tidak langsung. Siram saat 2-3 cm tanah atas kering. Pupuk sebulan sekali.']);
-  $s->execute(['Lidah Mertua','Sansevieria trifasciata','Tanaman Hias','Tangguh, cocok untuk pemula.',"Lidah mertua tahan kondisi kering dan minim cahaya, serta dikenal membantu menyaring udara dalam ruangan.",'Siram 2 minggu sekali. Hindari genangan air. Tahan cahaya rendah.']);
-  $s->execute(['Aglaonema','Aglaonema commutatum','Tanaman Hias','Daun berwarna cantik untuk dalam ruangan.',"Aglaonema atau sri rezeki punya corak daun merah, hijau, dan perak yang menarik.",'Tempatkan di cahaya sedang. Jaga media tanam tetap lembap, tidak becek.']);
+<?php
+/* Installer / migrasi database. AMAN dijalankan berkali-kali:
+   - membuat tabel kalau belum ada, menambah kolom yang kurang di database lama
+   - akun admin hanya dibuat kalau belum ada (password yang sudah ada TIDAK diubah)
+   - data contoh (data/tanaman.sql) hanya dimasukkan kalau tabel tanaman masih kosong */
+require 'config.php';
+$log=[];
 
+try{$d=db();}
+catch(PDOException $x){ // database belum dibuat -> coba buat (di hosting biasanya harus lewat cPanel)
+  try{$p=new PDO('mysql:host='.DB_HOST.';charset=utf8mb4',DB_USER,DB_PASS,[PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION]);
+      $p->exec('CREATE DATABASE IF NOT EXISTS `'.DB_NAME.'` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci');
+      $d=db();$log[]='Database '.DB_NAME.' dibuat.';}
+  catch(PDOException $y){head('Instalasi gagal');die('<main class="wrap"><p class="err">Tidak bisa terhubung ke database. Cek DB_HOST, DB_NAME, DB_USER, DB_PASS di config.php.<br><small>'.e($y->getMessage()).'</small></p></main>');}
 }
-$tanaman=[
-  'Tanaman Obat'=>[
-    'Kitolod','Daun saga','Daun kelor','Cocor bebek','Kunyit kuning','Kunyit putih',
-    'Bangun-bangun','Bawang dayak','Patah tulang','Daun sirih / sirih hijau','Kencur',
-    'Bangle','Sereh','Lidah buaya','Kumis kucing','Binahong','Tanaman jahe',
-    'Dandang gendis','Temulawak','Pegagan','Kemangi',
-  ],
-  'Tanaman Hias'=>[
-    'Kenanga','Daun pandan / pohon pandan','Daun suji','Melati','Bakung','Aglaonema',
-    'Bambu Jepang','Syngonium wendlandii','Kembang sepatu','Keladi','Kayu urip',
-    'Pucuk merah','Mangkokan','Bunga Asoka','Kuping gajah','Wali Songo',
-    'Ketapang kencana','Patah tulang daun keriting','Bunga Kasandra',
-  ],
-  'Tanaman Pangan / Sayuran / Buah'=>[
-    'Pepaya','Cabe rawit','Cabe hijau','Jagung','Mangga','Terong',
-  ],
-];
-$find=$d->prepare('SELECT id FROM tanaman WHERE nama=? LIMIT 1');
-$insert=$d->prepare("INSERT INTO tanaman(nama,kategori,ringkasan,deskripsi,manfaat,perawatan) VALUES(?,?,?,?,?,?)");
-$update=$d->prepare('UPDATE tanaman SET kategori=? WHERE nama=?');
-foreach($tanaman as $kategori=>$namaTanaman){
-  foreach($namaTanaman as $nama){
-    $find->execute([$nama]);
-    if($find->fetch())$update->execute([$kategori,$nama]);
-    else $insert->execute([$nama,$kategori,"Kelompok: $kategori.","$nama termasuk dalam kelompok $kategori pada katalog Kebun Hijau.",'','Sesuaikan cahaya, penyiraman, dan media tanam dengan kebutuhan tanaman.']);
-  }
+
+$d->exec("CREATE TABLE IF NOT EXISTS admins(id INT AUTO_INCREMENT PRIMARY KEY,username VARCHAR(50) UNIQUE NOT NULL,password VARCHAR(255) NOT NULL) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
+$d->exec("CREATE TABLE IF NOT EXISTS tanaman(id INT AUTO_INCREMENT PRIMARY KEY,nama VARCHAR(120) NOT NULL,nama_latin VARCHAR(160),kategori VARCHAR(80) NOT NULL DEFAULT 'Tanaman Hias',ringkasan VARCHAR(255),deskripsi TEXT,karakteristik TEXT,jenis TEXT,manfaat TEXT,perawatan TEXT,foto VARCHAR(100),video VARCHAR(100),video_url VARCHAR(255),created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,KEY idx_kategori(kategori)) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
+
+// database lama: tambahkan kolom yang belum ada
+foreach(['kategori'=>"VARCHAR(80) NOT NULL DEFAULT 'Tanaman Hias'",'karakteristik'=>'TEXT','jenis'=>'TEXT','manfaat'=>'TEXT','video'=>'VARCHAR(100)','video_url'=>'VARCHAR(255)'] as $c=>$def)
+  if(!$d->query("SHOW COLUMNS FROM tanaman LIKE '$c'")->fetch()){$d->exec("ALTER TABLE tanaman ADD `$c` $def");$log[]="Kolom $c ditambahkan.";}
+
+// rapikan data lama
+$n=$d->exec("UPDATE tanaman SET kategori='Tanaman Sayur / Buah' WHERE kategori='Tanaman Pangan / Sayuran / Buah'");
+if($n)$log[]="$n tanaman dipindah ke kelompok 'Tanaman Sayur / Buah'.";
+$n=$d->exec("UPDATE tanaman SET ringkasan=LEFT(CONCAT(TRIM(TRAILING '.' FROM SUBSTRING_INDEX(deskripsi,'. ',1)),'.'),255) WHERE ringkasan LIKE 'Kelompok:%' AND deskripsi IS NOT NULL AND deskripsi<>'' AND deskripsi NOT LIKE 'Kelompok:%'");
+if($n)$log[]="$n ringkasan placeholder diganti kalimat pertama deskripsi.";
+
+// admin: dibuat hanya kalau belum ada. Password yang sudah ada tidak disentuh.
+if(!$d->query("SELECT 1 FROM admins WHERE username='admin'")->fetch()){
+  $d->prepare("INSERT INTO admins(username,password) VALUES('admin',?)")->execute([password_hash('admin123',PASSWORD_DEFAULT)]);
+  $log[]="Akun admin dibuat.";}
+
+// data awal
+if(!$d->query("SELECT 1 FROM tanaman LIMIT 1")->fetch()){
+  $f=__DIR__.'/data/tanaman.sql';
+  if(is_file($f)){$d->exec(file_get_contents($f));$log[]=$d->query("SELECT COUNT(*) FROM tanaman")->fetchColumn().' tanaman contoh dimasukkan.';}
 }
-echo "<h2>Instalasi berhasil ✅</h2><p>Login admin: <b>admin</b> / <b>admin123</b></p><p><b>HAPUS file install.php dari hosting sekarang.</b></p><a href='admin/login.php'>Ke halaman login</a>";
+
+head('Instalasi Kebun Hijau'); ?>
+<main class="login"><div class="box"><div class="mascot" aria-hidden="true">🌱</div><h2>Instalasi berhasil ✅</h2>
+<?php foreach($log as $l) echo '<p class="ok">'.e($l).'</p>'; if(!$log) echo '<p class="ok">Database sudah up-to-date, tidak ada yang perlu diubah.</p>'; ?>
+<p>Login admin: <b>admin</b> / <b>admin123</b></p>
+<p class="err"><b>Penting:</b> hapus file <code>install.php</code> dari hosting sekarang.</p>
+<a class="btn" href="admin/login.php">Ke halaman login</a> <a href="index.php">Lihat website</a></div></main></body></html>
